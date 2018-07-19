@@ -87,6 +87,7 @@ export default {
     const done = () => {
       this.close();
       removeClass(picker, CLASS_OPEN);
+      removeClass(picker, 'input-mode');
       dispatchEvent(element, EVENT_HIDDEN);
     };
 
@@ -184,14 +185,18 @@ export default {
   },
 
   // Pick the current date to the target element.
-  pick() {
+  pick(currentTarget) {
     const { element } = this;
 
     if (dispatchEvent(element, EVENT_PICK) === false) {
       return this;
     }
 
-    const value = this.formatDate(this.date);
+    let value = this.formatDate(this.date);
+
+    if (this.input_mode === true) {
+      value = this.formatDate(this.generateInputDate(currentTarget));
+    }
 
     this.setValue(value);
 
@@ -202,6 +207,37 @@ export default {
     this.hide();
 
     return this;
+  },
+
+  edit(currentTarget) {
+    this.changeView(currentTarget);
+  },
+
+  pickMode(currentTarget) {
+    removeClass(currentTarget, 'input-mode');
+    this.input_mode = false;
+    this.setDate(this.generateInputDate(currentTarget));
+  },
+
+  changeView(picker) {
+    addClass(picker, 'input-mode');
+    const date = this.getDate();
+    const date_array = [date.getDate(), (date.getMonth() + 1), date.getFullYear()];
+    const inputs = picker.querySelectorAll('.input-container input');
+    for (let i = 0; i < inputs.length; i++) {
+      inputs[i].value = date_array[i];
+    }
+
+    this.input_mode = true;
+  },
+
+  generateInputDate(picker) {
+    const inputs = picker.querySelectorAll('.input-container input');
+    const date = [];
+    for (let i = inputs.length - 1; i >= 0; i--) {
+      date.push(+inputs[i].value);
+    }
+    return new Date(date[0], (date[1] - 1), date[2]);
   },
 
   /**

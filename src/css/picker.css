@@ -1,21 +1,67 @@
+/*!
+ * Picker.js v1.0.0-beta
+ * https://fengyuanchen.github.io/pickerjs
+ *
+ * Copyright 2016-present Chen Fengyuan
+ * Released under the MIT license
+ *
+ * Date: 2018-07-18T15:56:39.004Z
+ */
+
 :root {
   --gray: #999;
-  --blue: #0074d9;
+  --yellow: #fcb813;
   --color: #333;
   --background-color: #fff;
   --border: 1px solid #eee;
 }
 
+.input-mode .picker-grid.picker-multiple{
+  display: none;
+}
+
+.input-mode .picker-grid.input-mode{
+  display: flex;
+}
+
+.picker-grid.input-mode{
+  display: none;
+  margin: 0;
+  height: 90px;
+}
+
+.picker-grid.input-mode .input-container{
+  width: 30%;
+  margin-left: 1.5%;
+  margin-right: 1.5%;
+  height: 100%;
+}
+
+.picker-grid.input-mode .input-container input{
+  width: 100%;
+  height: 100%;
+  font-size: 30px;
+  text-align: center;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
 .picker {
   background-color: rgba(0, 0, 0, .5);
+  color: #333;
   color: var(--color);
   direction: ltr;
   display: none;
   font-size: 1rem;
   line-height: 1.5;
   overflow: hidden;
+  -ms-touch-action: none;
   touch-action: none;
+  -webkit-transition: opacity .15s;
   transition: opacity .15s;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 
@@ -26,23 +72,24 @@
   right: 0;
   top: 0;
   z-index: 1986;
+}
 
-  & > .picker-dialog {
-    bottom: -100%;
-    left: 0;
-    max-height: 100%;
-    position: absolute;
-    right: 0;
-    transition: bottom .3s;
-  }
+.picker-fixed > .picker-dialog {
+  bottom: -100%;
+  left: 0;
+  max-height: 100%;
+  position: absolute;
+  right: 0;
+  -webkit-transition: bottom .3s;
+  transition: bottom .3s;
+}
 
-  & .picker-header {
-    display: block;
-  }
+.picker-fixed .picker-header {
+  display: block;
+}
 
-  & .picker-footer {
-    display: table;
-  }
+.picker-fixed .picker-footer {
+  display: table;
 }
 
 .picker-open {
@@ -52,22 +99,26 @@
 
 .picker-opened {
   opacity: 1;
+}
 
-  & > .picker-dialog {
-    bottom: 0;
-  }
+.picker-opened > .picker-dialog {
+  bottom: 0;
 }
 
 .picker-dialog {
+  background-color: #fff;
   background-color: var(--background-color);
+  border: 1px solid #eee;
   border: var(--border);
 }
 
 .picker-header {
+  border-bottom: 1px solid #eee;
   border-bottom: var(--border);
   display: none;
   padding: .875rem 1.25rem;
   position: relative;
+  text-align: right;
 }
 
 .picker-title {
@@ -77,9 +128,40 @@
   margin: 0;
 }
 
+.picker-edit {
+  display: block;
+  color: #fcb813;
+  font-size: 1.125rem;
+  font-weight: normal;
+  line-height: 1.25rem;
+  margin: 0;
+  border: 0;
+  background: transparent;
+}
+
+.input-mode .picker-edit{
+  display: none;
+}
+
+.picker-pick{
+  display: none;
+  color: #fcb813;
+  font-size: 1.125rem;
+  font-weight: normal;
+  line-height: 1.25rem;
+  margin: 0;
+  border: 0;
+  background: transparent;
+}
+
+.input-mode .picker-pick{
+  display: block;
+}
+
 .picker-close {
   background-color: transparent;
   border-width: 0;
+  color: #999;
   color: var(--gray);
   font-size: 1.75rem;
   height: 3rem;
@@ -89,12 +171,12 @@
   right: 0;
   top: 0;
   width: 3rem;
+}
 
-  &:focus,
-  &:hover {
-    opacity: 1;
-    outline: none;
-  }
+.picker-close:focus,
+.picker-close:hover {
+  opacity: 1;
+  outline: none;
 }
 
 .picker-body {
@@ -106,48 +188,53 @@
   margin-bottom: -2.5rem;
   margin-top: -2.5rem;
   width: 100%;
+  table-layout: fixed;
 }
 
 .picker-cell {
   display: table-cell;
   position: relative;
+  table-layout: fixed;
+}
 
-  &::before,
-  &::after {
-    content: '';
-    display: block;
-    left: 0;
-    position: absolute;
-    right: 0;
-    z-index: 0;
-  }
+.picker-cell::before,
+.picker-cell::after {
+  content: '';
+  display: block;
+  left: 0;
+  position: absolute;
+  right: 0;
+  z-index: 0;
+}
 
-  &::before {
-    background-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, .05));
-    border-bottom: var(--border);
-    bottom: 50%;
-    margin-bottom: 1.25rem;
-    top: 0;
-  }
+.picker-cell::before {
+  background-image: -webkit-gradient(linear, left bottom, left top, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, .05)));
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, .05));
+  border-bottom: 1px solid #eee;
+  border-bottom: var(--border);
+  bottom: 50%;
+  margin-bottom: 1.25rem;
+  top: 0;
+}
 
-  &::after {
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, .05));
-    border-top: var(--border);
-    bottom: 0;
-    margin-top: 1.25rem;
-    top: 50%;
-  }
+.picker-cell::after {
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, .05)));
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, .05));
+  border-top: 1px solid #eee;
+  border-top: var(--border);
+  bottom: 0;
+  margin-top: 1.25rem;
+  top: 50%;
+}
 
-  & + .picker-cell {
-    border-left: var(--border);
-  }
+.picker-cell + .picker-cell {
+  border-left: 1px solid #eee;
+  border-left: var(--border);
+}
 
-  @nest .picker-single & {
-    &::before,
-    &::after {
-      display: none;
-    }
-  }
+.picker-single .picker-cell::before,
+.picker-single .picker-cell::after {
+  display: none;
 }
 
 .picker-list {
@@ -159,6 +246,7 @@
 }
 
 .picker-item {
+  color: #999;
   color: var(--gray);
   padding: .5rem;
   text-align: center;
@@ -166,11 +254,13 @@
 }
 
 .picker-picked {
-  color: var(--blue);
+  color: #fcb813;
+  color: var(--yellow);
   font-size: 1.125em;
 }
 
 .picker-footer {
+  border-top: 1px solid #eee;
   border-top: var(--border);
   display: none;
   width: 100%;
@@ -184,14 +274,17 @@
   font-size: 1rem;
   padding: .75rem 1rem;
   width: 50%;
+}
 
-  &:focus,
-  &:hover {
-    background-color: #fcfcfc;
-    outline: none;
-  }
+.picker-cancel:focus,
+.picker-cancel:hover,
+.picker-confirm:focus,
+.picker-confirm:hover {
+  background-color: #fcfcfc;
+  outline: none;
 }
 
 .picker-confirm {
-  color: var(--blue);
+  color: #fcb813;
+  color: var(--yellow);
 }

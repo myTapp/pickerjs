@@ -12,7 +12,11 @@ export default {
     if (action === 'hide') {
       this.hide();
     } else if (action === 'pick') {
-      this.pick();
+      this.pick(e.currentTarget);
+    } else if (action === 'edit') {
+      this.edit(e.currentTarget);
+    } else if (action === 'pick-mode') {
+      this.pickMode(e.currentTarget);
     }
   },
 

@@ -57,6 +57,7 @@ export default {
     title: 'Pick a date / time',
     cancel: 'Cancel',
     confirm: 'OK',
+    edit_date: 'Digitar data',
   },
 
   // Translate date / time text.

@@ -5,7 +5,7 @@
  * Copyright 2016-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2018-06-18T03:14:41.357Z
+ * Date: 2018-07-19T18:56:20.811Z
  */
 
 var DEFAULTS = {
@@ -40,7 +40,8 @@ var DEFAULTS = {
   text: {
     title: 'Pick a date / time',
     cancel: 'Cancel',
-    confirm: 'OK'
+    confirm: 'OK',
+    edit_date: 'Digitar data'
   },
 
   // Translate date / time text.
@@ -57,7 +58,15 @@ var DEFAULTS = {
   pick: null
 };
 
-var TEMPLATE = '<div class="picker" data-action="hide" touch-action="none" tabindex="-1" role="dialog">' + '<div class="picker-dialog" role="document">' + '<div class="picker-header">' + '<h4 class="picker-title">{{ title }}</h4>' + '<button type="button" class="picker-close" data-action="hide" aria-label="Close">&times;</button>' + '</div>' + '<div class="picker-body">' + '<div class="picker-grid"></div>' + '</div>' + '<div class="picker-footer">' + '<button type="button" class="picker-cancel" data-action="hide">{{ cancel }}</button>' + '<button type="button" class="picker-confirm" data-action="pick">{{ confirm }}</button>' + '</div>' + '</div>' + '</div>';
+var TEMPLATE = '<div class="picker" data-action="hide" touch-action="none" tabindex="-1" role="dialog">' + '<div class="picker-dialog" role="document">' + '<div class="picker-header">' +
+// '<h4 class="picker-title">{{ title }}</h4>' +
+'<button type="button" class="picker-edit" data-action="edit" aria-label="Edit">✎ {{ edit_date }}</button>' + '<button type="button" class="picker-pick" data-action="pick-mode" aria-label="Pick">{{ title }}</button>' +
+// '<button type="button" class="picker-close" data-action="hide" aria-label="Close">&times;</button>' +
+'</div>' + '<div class="picker-body">' + '<div class="picker-grid"></div>' + '<div class="picker-grid input-mode">\
+            <div class="day input-container"><input></input></div>\
+            <div class="month input-container"><input></input></div>\
+            <div class="year input-container"><input></input></div>\
+         </div>' + '</div>' + '<div class="picker-footer">' + '<button type="button" class="picker-cancel" data-action="hide">{{ cancel }}</button>' + '<button type="button" class="picker-confirm" data-action="pick">{{ confirm }}</button>' + '</div>' + '</div>' + '</div>';
 
 var IN_BROWSER = typeof window !== 'undefined';
 var WINDOW = IN_BROWSER ? window : {};
@@ -708,7 +717,11 @@ var handlers = {
     if (action === 'hide') {
       this.hide();
     } else if (action === 'pick') {
-      this.pick();
+      this.pick(e.currentTarget);
+    } else if (action === 'edit') {
+      this.edit(e.currentTarget);
+    } else if (action === 'pick-mode') {
+      this.pickMode(e.currentTarget);
     }
   },
   wheel: function wheel(e) {
@@ -1056,6 +1069,7 @@ var methods = {
     var done = function done() {
       _this.close();
       removeClass(picker, CLASS_OPEN);
+      removeClass(picker, 'input-mode');
       dispatchEvent(element, EVENT_HIDDEN);
     };
 
@@ -1158,7 +1172,7 @@ var methods = {
 
 
   // Pick the current date to the target element.
-  pick: function pick() {
+  pick: function pick(currentTarget) {
     var element = this.element;
 
 
@@ -1167,6 +1181,10 @@ var methods = {
     }
 
     var value = this.formatDate(this.date);
+
+    if (this.input_mode === true) {
+      value = this.formatDate(this.generateInputDate(currentTarget));
+    }
 
     this.setValue(value);
 
@@ -1177,6 +1195,33 @@ var methods = {
     this.hide();
 
     return this;
+  },
+  edit: function edit(currentTarget) {
+    this.changeView(currentTarget);
+  },
+  pickMode: function pickMode(currentTarget) {
+    removeClass(currentTarget, 'input-mode');
+    this.input_mode = false;
+    this.setDate(this.generateInputDate(currentTarget));
+  },
+  changeView: function changeView(picker) {
+    addClass(picker, 'input-mode');
+    var date = this.getDate();
+    var date_array = [date.getDate(), date.getMonth() + 1, date.getFullYear()];
+    var inputs = picker.querySelectorAll('.input-container input');
+    for (var i = 0; i < inputs.length; i++) {
+      inputs[i].value = date_array[i];
+    }
+
+    this.input_mode = true;
+  },
+  generateInputDate: function generateInputDate(picker) {
+    var inputs = picker.querySelectorAll('.input-container input');
+    var date = [];
+    for (var i = inputs.length - 1; i >= 0; i--) {
+      date.push(+inputs[i].value);
+    }
+    return new Date(date[0], date[1] - 1, date[2]);
   },
 
 
