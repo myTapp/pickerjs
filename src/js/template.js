@@ -10,9 +10,9 @@ export default (
       '<div class="picker-body">' +
         '<div class="picker-grid"></div>' +
         '<div class="picker-grid input-mode">\
-            <div class="day input-container"><input></input></div>\
-            <div class="month input-container"><input></input></div>\
-            <div class="year input-container"><input></input></div>\
+            <div class="day input-container"><input type="number" pattern="\\d*" autocorrect="off" autocapitalize="off" autocomplete="on"></input></div>\
+            <div class="month input-container"><input type="number" pattern="\\d*" autocorrect="off" autocapitalize="off" autocomplete="on"></input></div>\
+            <div class="year input-container"><input type="number" pattern="\\d*" autocorrect="off" autocapitalize="off" autocomplete="on"></input></div>\
          </div>' +
       '</div>' +
       '<div class="picker-footer">' +
