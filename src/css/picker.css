@@ -30,6 +30,10 @@
   height: 90px;
 }
 
+.picker-grid form{
+  display: flex;
+}
+
 .picker-grid.input-mode .input-container{
   width: 30%;
   margin-left: 1.5%;

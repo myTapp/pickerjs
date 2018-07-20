@@ -198,6 +198,7 @@ export default {
       value = this.formatDate(this.generateInputDate(currentTarget));
     }
 
+    this.setDate(this.generateInputDate(currentTarget));
     this.setValue(value);
 
     if (this.isInput && dispatchEvent(element, 'change') === false) {
@@ -216,7 +217,8 @@ export default {
   pickMode(currentTarget) {
     removeClass(currentTarget, 'input-mode');
     this.input_mode = false;
-    this.setDate(this.generateInputDate(currentTarget));
+    let new_date = this.generateInputDate(currentTarget);
+    this.setDate(new_date);
   },
 
   changeView(picker) {
@@ -233,11 +235,14 @@ export default {
 
   generateInputDate(picker) {
     const inputs = picker.querySelectorAll('.input-container input');
-    const date = [];
+    let date = [];
     for (let i = inputs.length - 1; i >= 0; i--) {
       date.push(+inputs[i].value);
     }
-    return new Date(date[0], (date[1] - 1), date[2]);
+
+    let value = new Date(date[0], (date[1] - 1), date[2]);
+
+    return value;
   },
 
   /**

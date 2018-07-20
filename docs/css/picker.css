@@ -5,7 +5,7 @@
  * Copyright 2016-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2018-07-20T13:14:39.170Z
+ * Date: 2018-07-20T15:36:26.403Z
  */
 
 /*!
@@ -40,6 +40,12 @@
   display: none;
   margin: 0;
   height: 90px;
+}
+
+.picker-grid form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .picker-grid.input-mode .input-container {

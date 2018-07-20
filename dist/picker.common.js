@@ -5,7 +5,7 @@
  * Copyright 2016-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2018-07-20T13:19:01.485Z
+ * Date: 2018-07-20T15:42:35.130Z
  */
 
 'use strict';
@@ -65,9 +65,11 @@ var TEMPLATE = '<div class="picker" data-action="hide" touch-action="none" tabin
 '<button type="button" class="picker-edit" data-action="edit" aria-label="Edit">✎ {{ edit_date }}</button>' + '<button type="button" class="picker-pick" data-action="pick-mode" aria-label="Pick">{{ title }}</button>' +
 // '<button type="button" class="picker-close" data-action="hide" aria-label="Close">&times;</button>' +
 '</div>' + '<div class="picker-body">' + '<div class="picker-grid"></div>' + '<div class="picker-grid input-mode">\
-            <div class="day input-container"><input type="number" pattern="\\d*" autocorrect="off" autocapitalize="off" autocomplete="on"></input></div>\
-            <div class="month input-container"><input type="number" pattern="\\d*" autocorrect="off" autocapitalize="off" autocomplete="on"></input></div>\
-            <div class="year input-container"><input type="number" pattern="\\d*" autocorrect="off" autocapitalize="off" autocomplete="on"></input></div>\
+            <form>\
+              <div class="day input-container"><input type="number" pattern="\\d*" autocorrect="off" autocapitalize="off" autocomplete="bday-day"></input></div>\
+              <div class="month input-container"><input type="number" pattern="\\d*" autocorrect="off" autocapitalize="off" autocomplete="bday-month"></input></div>\
+              <div class="year input-container"><input type="number" pattern="\\d*" autocorrect="off" autocapitalize="off" autocomplete="bday-year"></input></div>\
+            </form>\
          </div>' + '</div>' + '<div class="picker-footer">' + '<button type="button" class="picker-cancel" data-action="hide">{{ cancel }}</button>' + '<button type="button" class="picker-confirm" data-action="pick">{{ confirm }}</button>' + '</div>' + '</div>' + '</div>';
 
 var IN_BROWSER = typeof window !== 'undefined';
@@ -859,6 +861,8 @@ var helpers = {
     var min = isFunction(data.min) ? data.min() : data.min;
     var base = 0;
 
+    console.log(this.data, data);
+
     if (isFinite(max)) {
       base = min > 0 ? max : max + 1;
     }
@@ -1188,6 +1192,7 @@ var methods = {
       value = this.formatDate(this.generateInputDate(currentTarget));
     }
 
+    this.setDate(this.generateInputDate(currentTarget));
     this.setValue(value);
 
     if (this.isInput && dispatchEvent(element, 'change') === false) {
@@ -1204,7 +1209,8 @@ var methods = {
   pickMode: function pickMode(currentTarget) {
     removeClass(currentTarget, 'input-mode');
     this.input_mode = false;
-    this.setDate(this.generateInputDate(currentTarget));
+    var new_date = this.generateInputDate(currentTarget);
+    this.setDate(new_date);
   },
   changeView: function changeView(picker) {
     addClass(picker, 'input-mode');
@@ -1223,7 +1229,10 @@ var methods = {
     for (var i = inputs.length - 1; i >= 0; i--) {
       date.push(+inputs[i].value);
     }
-    return new Date(date[0], date[1] - 1, date[2]);
+
+    var value = new Date(date[0], date[1] - 1, date[2]);
+
+    return value;
   },
 
 

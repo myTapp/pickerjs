@@ -26,6 +26,8 @@ export default {
     const min = isFunction(data.min) ? data.min() : data.min;
     let base = 0;
 
+    console.log(this.data, data);
+
     if (isFinite(max)) {
       base = min > 0 ? max : max + 1;
     }
