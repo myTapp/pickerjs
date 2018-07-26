@@ -5,7 +5,7 @@
  * Copyright 2016-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2018-07-20T15:42:35.130Z
+ * Date: 2018-07-25T20:29:18.303Z
  */
 
 var DEFAULTS = {
@@ -859,8 +859,6 @@ var helpers = {
     var min = isFunction(data.min) ? data.min() : data.min;
     var base = 0;
 
-    console.log(this.data, data);
-
     if (isFinite(max)) {
       base = min > 0 ? max : max + 1;
     }
@@ -1188,9 +1186,9 @@ var methods = {
 
     if (this.input_mode === true) {
       value = this.formatDate(this.generateInputDate(currentTarget));
+      this.setDate(this.generateInputDate(currentTarget));
     }
 
-    this.setDate(this.generateInputDate(currentTarget));
     this.setValue(value);
 
     if (this.isInput && dispatchEvent(element, 'change') === false) {

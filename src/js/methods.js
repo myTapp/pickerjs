@@ -196,9 +196,9 @@ export default {
 
     if (this.input_mode === true) {
       value = this.formatDate(this.generateInputDate(currentTarget));
+      this.setDate(this.generateInputDate(currentTarget));
     }
 
-    this.setDate(this.generateInputDate(currentTarget));
     this.setValue(value);
 
     if (this.isInput && dispatchEvent(element, 'change') === false) {
