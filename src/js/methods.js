@@ -31,6 +31,7 @@ export default {
    */
   show(immediate = false) {
     const { element, picker } = this;
+    this.input_mode = false;
 
     if (this.inline || this.shown) {
       return this;

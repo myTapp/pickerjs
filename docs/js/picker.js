@@ -5,7 +5,7 @@
  * Copyright 2016-present Chen Fengyuan
  * Released under the MIT license
  *
- * Date: 2018-07-25T20:29:18.303Z
+ * Date: 2018-07-30T17:35:08.766Z
  */
 
 (function (global, factory) {
@@ -1015,6 +1015,7 @@
       var element = this.element,
           picker = this.picker;
 
+      this.input_mode = false;
 
       if (this.inline || this.shown) {
         return this;
